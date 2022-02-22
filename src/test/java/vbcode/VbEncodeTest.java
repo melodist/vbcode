@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import utils.BinaryGroup;
+import utils.BinaryTagData;
+import utils.IntegerEntryIdGroup;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +24,8 @@ class VbEncodeTest {
     @MethodSource("provideNumber")
     public void vbEncodeNumberTest(int n, List<Byte> expected){
         // when
-        List<Byte> actual = VbEncode.vbEncodeNumber(n);
+        BinaryGroup binaryGroup = VbEncode.vbEncodeNumber(n);
+        List<Byte> actual = binaryGroup.getBinaryEntryIds();
 
         // then
         System.out.println(actual);
@@ -58,18 +60,21 @@ class VbEncodeTest {
     public void vbEncodeTest(){
         // given
         List<Integer> numbers = List.of(1, 256);
+        IntegerEntryIdGroup integerEntryIdGroup = new IntegerEntryIdGroup(numbers);
 
         // when
-        List<Byte> actual = VbEncode.vbEncode(numbers);
+        BinaryTagData binaryTagData = VbEncode.vbEncode(integerEntryIdGroup);
+        List<BinaryGroup> actual = binaryTagData.getBinaryEntryIds();
 
         // then
-        List<Byte> expectedFor1 = List.of((byte) Integer.parseInt("10000001", 2));
-        List<Byte> expectedFor256 = List.of((byte) Integer.parseInt("00000010", 2), (byte) Integer.parseInt("10000000", 2));
+        BinaryGroup expectedFor1 = new BinaryGroup(List.of((byte) Integer.parseInt("10000001", 2)));
+        BinaryGroup expectedFor256 = new BinaryGroup(List.of(
+                        (byte) Integer.parseInt("00000010", 2),
+                        (byte) Integer.parseInt("10000000", 2)));
 
-        List<Byte> expected = Stream.of(expectedFor1, expectedFor256)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(List.of(expectedFor1, expectedFor256))
+                .isNotEqualTo(List.of(expectedFor1));
     }
 
     
