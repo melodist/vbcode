@@ -1,6 +1,5 @@
 package vbcode;
 
-import utils.BinaryGroup;
 import utils.BinaryTagData;
 import utils.IntegerEntryIdGroup;
 
@@ -22,18 +21,18 @@ public class VbEncode {
 
     public static BinaryTagData vbEncode(IntegerEntryIdGroup integerEntryIdGroup) {
         List<Integer> integerEntryIds = integerEntryIdGroup.getIntegerEntryIds();
-        List<BinaryGroup> binaryEntryIds = new ArrayList<>();
-        List<Integer> binaryEntrySizes = new ArrayList<>();
+        List<Byte> binaryEntryIds = new ArrayList<>();
+        int binaryEntrySize = 0;
 
         for (Integer number : integerEntryIds) {
-            BinaryGroup binaryGroup = vbEncodeNumber(number);
-            binaryEntryIds.add(binaryGroup);
-            binaryEntrySizes.add(binaryGroup.size());
+            List<Byte> binaryGroup = vbEncodeNumber(number);
+            binaryEntryIds.addAll(binaryGroup);
+            binaryEntrySize += binaryGroup.size();
         }
-        return new BinaryTagData(binaryEntryIds, binaryEntrySizes);
+        return new BinaryTagData(binaryEntryIds, binaryEntrySize);
     }
 
-    public static BinaryGroup vbEncodeNumber(Integer number) {
+    public static List<Byte> vbEncodeNumber(Integer number) {
         Integer n = number;
         Deque<Integer> integers = new LinkedList<>();
         while (true) {
@@ -45,9 +44,8 @@ public class VbEncode {
         List<Integer> result = new ArrayList<>(integers);
         int lastIndex = result.size() - 1;
         result.set(lastIndex, result.get(lastIndex) + 128);
-        return new BinaryGroup(
-                result.stream()
+        return result.stream()
                 .map(Integer::byteValue)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 }

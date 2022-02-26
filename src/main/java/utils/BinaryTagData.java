@@ -8,19 +8,19 @@ import java.util.List;
  * Time: 오후 11:11
  */
 public class BinaryTagData {
-    private List<BinaryGroup> binaryEntryIds;
-    private List<Integer> binaryEntrySizes;
+    private List<Byte> binaryEntryIds;
+    private int binaryEntrySize;
 
-    public BinaryTagData(List<BinaryGroup> binaryEntryIds, List<Integer> binaryEntrySizes) {
+    public BinaryTagData(List<Byte> binaryEntryIds, int binaryEntrySize) {
         this.binaryEntryIds = binaryEntryIds;
-        this.binaryEntrySizes = binaryEntrySizes;
+        this.binaryEntrySize = binaryEntrySize;
     }
 
-    public List<BinaryGroup> getBinaryEntryIds() {
+    public List<Byte> getBinaryEntryIds() {
         return binaryEntryIds;
     }
 
-    public List<Integer> getBinaryEntrySizes() {
-        return binaryEntrySizes;
+    public int getBinaryEntrySize() {
+        return binaryEntrySize;
     }
 }

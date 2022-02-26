@@ -3,6 +3,7 @@ package utils;
 import vbcode.VbEncode;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -59,16 +60,16 @@ public class IOUtil {
                 byteOut.write(tagNameBytes);
 
                 // 2. EntryIdGroup Data
-                List<BinaryGroup> binaryEntryIds = binaryTagData.getBinaryEntryIds();
-                List<Integer> binaryEntrySizes = binaryTagData.getBinaryEntrySizes();
+                List<Byte> binaryEntryIds = binaryTagData.getBinaryEntryIds();
+                int binaryEntrySize = binaryTagData.getBinaryEntrySize();
+
+                // write byteEntrySize
+                byteOut.write(binaryEntrySize);
                 // write byteEntry
-                IntStream
-                        .range(0, binaryEntryIds.size())
-                        .forEach(i -> {
-                            byteOut.write(binaryEntrySizes.get(i));
-                            binaryEntryIds.get(i).getBinaryEntryIds()
-                                    .forEach(byteOut::write);
-                        });
+                int bound = binaryEntryIds.size();
+                for (Byte binaryEntryId : binaryEntryIds) {
+                    byteOut.write(binaryEntryId.intValue());
+                }
             }
 
             byteOut.writeTo(out);

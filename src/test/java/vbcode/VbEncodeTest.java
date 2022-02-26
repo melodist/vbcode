@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import utils.BinaryGroup;
 import utils.BinaryTagData;
 import utils.IntegerEntryIdGroup;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,8 +24,7 @@ class VbEncodeTest {
     @MethodSource("provideNumber")
     public void vbEncodeNumberTest(int n, List<Byte> expected){
         // when
-        BinaryGroup binaryGroup = VbEncode.vbEncodeNumber(n);
-        List<Byte> actual = binaryGroup.getBinaryEntryIds();
+        List<Byte> actual = VbEncode.vbEncodeNumber(n);
 
         // then
         System.out.println(actual);
@@ -64,17 +63,16 @@ class VbEncodeTest {
 
         // when
         BinaryTagData binaryTagData = VbEncode.vbEncode(integerEntryIdGroup);
-        List<BinaryGroup> actual = binaryTagData.getBinaryEntryIds();
+        List<Byte> actual = binaryTagData.getBinaryEntryIds();
 
         // then
-        BinaryGroup expectedFor1 = new BinaryGroup(List.of((byte) Integer.parseInt("10000001", 2)));
-        BinaryGroup expectedFor256 = new BinaryGroup(List.of(
-                        (byte) Integer.parseInt("00000010", 2),
-                        (byte) Integer.parseInt("10000000", 2)));
+        List<Byte> expected = Arrays.asList(
+                (byte) Integer.parseInt("10000001", 2),
+                (byte) Integer.parseInt("00000010", 2),
+                (byte) Integer.parseInt("10000000", 2));
 
         assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(List.of(expectedFor1, expectedFor256))
-                .isNotEqualTo(List.of(expectedFor1));
+                .isEqualTo(expected);
     }
 
     
