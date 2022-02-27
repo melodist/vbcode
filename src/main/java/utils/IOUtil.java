@@ -1,16 +1,13 @@
 package utils;
 
+import vbcode.VbDecode;
 import vbcode.VbEncode;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by melodist
@@ -51,7 +48,7 @@ public class IOUtil {
             for (String tagName : dataMap.keySet()) {
                 // Encode Data
                 IntegerEntryIdGroup integerEntryIdGroup = dataMap.get(tagName);
-                BinaryTagData binaryTagData = VbEncode.vbEncode(integerEntryIdGroup);
+                BinaryEntryIdGroup binaryEntryIdGroup = VbEncode.vbEncode(integerEntryIdGroup);
 
                 // Write Binary Data
                 // 1. Tag Data
@@ -60,8 +57,8 @@ public class IOUtil {
                 byteOut.write(tagNameBytes);
 
                 // 2. EntryIdGroup Data
-                List<Byte> binaryEntryIds = binaryTagData.getBinaryEntryIds();
-                int binaryEntrySize = binaryTagData.getBinaryEntrySize();
+                List<Byte> binaryEntryIds = binaryEntryIdGroup.getBinaryEntryIds();
+                int binaryEntrySize = binaryEntryIdGroup.getBinaryEntrySize();
 
                 // write byteEntrySize
                 byteOut.write(binaryEntrySize);
@@ -76,5 +73,68 @@ public class IOUtil {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static List<BinaryTagData> binaryInput(String filePath) {
+        List<BinaryTagData> binaryTagDataList = new ArrayList<>();
+
+        // read binary file
+        try(FileInputStream fileInputStream = new FileInputStream(filePath)) {
+            byte[] integerBuffer = new byte[4];
+            int offset = 0;
+            int INTEGER_SIZE = 4;
+
+            while ((fileInputStream.readNBytes(integerBuffer, offset, INTEGER_SIZE)) == 4) {
+                // read tag length
+                int tagSize = ByteBuffer.wrap(integerBuffer).getInt();
+
+                // read tag
+                byte[] binaryTagName = fileInputStream.readNBytes(tagSize);
+
+                // read binary entry length
+                fileInputStream.readNBytes(integerBuffer, offset, INTEGER_SIZE);
+                int binaryEntrySize = ByteBuffer.wrap(integerBuffer).getInt();
+
+                // read binary entry
+                byte[] binaryEntry = fileInputStream.readNBytes(binaryEntrySize);
+
+                binaryTagDataList.add(new BinaryTagData(binaryTagName, binaryEntry));
+            }
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return binaryTagDataList;
+    }
+
+    public static void stringOutput(List<BinaryTagData> binaryTagDataList, String filePath) {
+        Map<String, IntegerEntryIdGroup> dataMap = decodeData(binaryTagDataList);
+
+        // write string data
+        try (FileOutputStream out = new FileOutputStream(filePath)) {
+            for (String tagName : dataMap.keySet()) {
+                String entryIdString = dataMap.get(tagName).getIntegerEntryIds()
+                        .stream().map(Object::toString).collect(Collectors.joining(","));
+
+                out.write(tagName.getBytes(StandardCharsets.UTF_8));
+                out.write(" ".getBytes(StandardCharsets.UTF_8));
+                out.write(entryIdString.getBytes(StandardCharsets.UTF_8));
+                out.write("\n".getBytes(StandardCharsets.UTF_8));
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static Map<String, IntegerEntryIdGroup> decodeData(List<BinaryTagData> binaryTagDataList) {
+        // decode data
+        Map<String, IntegerEntryIdGroup> dataMap = new HashMap<>();
+        for (BinaryTagData binaryTagData: binaryTagDataList) {
+            byte[] binaryEntryData = binaryTagData.getBinaryEntryData();
+            String tagName = new String(binaryTagData.getBinaryTagName());
+            List<Integer> entryIds = VbDecode.vbDecode(binaryEntryData);
+            IntegerEntryIdGroup integerEntryIdGroup = new IntegerEntryIdGroup(entryIds);
+            dataMap.put(tagName, integerEntryIdGroup);
+        }
+        return dataMap;
     }
 }
