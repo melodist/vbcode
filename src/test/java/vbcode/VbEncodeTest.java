@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import utils.BinaryTagData;
+import utils.BinaryEntryIdGroup;
 import utils.IntegerEntryIdGroup;
 
 import java.util.Arrays;
@@ -62,8 +62,8 @@ class VbEncodeTest {
         IntegerEntryIdGroup integerEntryIdGroup = new IntegerEntryIdGroup(numbers);
 
         // when
-        BinaryTagData binaryTagData = VbEncode.vbEncode(integerEntryIdGroup);
-        List<Byte> actual = binaryTagData.getBinaryEntryIds();
+        BinaryEntryIdGroup binaryEntryIdGroup = VbEncode.vbEncode(integerEntryIdGroup);
+        List<Byte> actual = binaryEntryIdGroup.getBinaryEntryIds();
 
         // then
         List<Byte> expected = Arrays.asList(

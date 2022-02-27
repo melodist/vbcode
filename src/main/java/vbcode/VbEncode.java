@@ -1,6 +1,6 @@
 package vbcode;
 
-import utils.BinaryTagData;
+import utils.BinaryEntryIdGroup;
 import utils.IntegerEntryIdGroup;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class VbEncode {
 
-    public static BinaryTagData vbEncode(IntegerEntryIdGroup integerEntryIdGroup) {
+    public static BinaryEntryIdGroup vbEncode(IntegerEntryIdGroup integerEntryIdGroup) {
         List<Integer> integerEntryIds = integerEntryIdGroup.getIntegerEntryIds();
         List<Byte> binaryEntryIds = new ArrayList<>();
         int binaryEntrySize = 0;
@@ -29,7 +29,7 @@ public class VbEncode {
             binaryEntryIds.addAll(binaryGroup);
             binaryEntrySize += binaryGroup.size();
         }
-        return new BinaryTagData(binaryEntryIds, binaryEntrySize);
+        return new BinaryEntryIdGroup(binaryEntryIds, binaryEntrySize);
     }
 
     public static List<Byte> vbEncodeNumber(Integer number) {
