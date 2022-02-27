@@ -1,26 +1,24 @@
 package utils;
 
-import java.util.List;
-
 /**
  * Created by melodist
- * Date: 2022-02-21 021
- * Time: 오후 11:11
+ * Date: 2022-02-27 027
+ * Time: 오전 12:03
  */
 public class BinaryTagData {
-    private List<Byte> binaryEntryIds;
-    private int binaryEntrySize;
+    private final byte[] binaryTagName;
+    private final byte[] binaryEntryData;
 
-    public BinaryTagData(List<Byte> binaryEntryIds, int binaryEntrySize) {
-        this.binaryEntryIds = binaryEntryIds;
-        this.binaryEntrySize = binaryEntrySize;
+    public BinaryTagData(byte[] binaryTagName, byte[] binaryEntryData) {
+        this.binaryTagName = binaryTagName;
+        this.binaryEntryData = binaryEntryData;
     }
 
-    public List<Byte> getBinaryEntryIds() {
-        return binaryEntryIds;
+    public byte[] getBinaryTagName() {
+        return binaryTagName;
     }
 
-    public int getBinaryEntrySize() {
-        return binaryEntrySize;
+    public byte[] getBinaryEntryData() {
+        return binaryEntryData;
     }
 }
