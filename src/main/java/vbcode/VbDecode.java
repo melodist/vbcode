@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class VbDecode {
 
-    public static List<Integer> vbDecode(List<Byte> encodedList) {
+    public static List<Integer> vbDecode(byte[] encodedList) {
         int n = 0;
         List<Integer> decoded = new ArrayList<>();
-        for (Byte encoded : encodedList) {
+        for (byte encoded : encodedList) {
             if (encoded >= 0) {
                 n = 128 * n + encoded;
             } else {

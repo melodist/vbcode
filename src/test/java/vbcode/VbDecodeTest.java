@@ -2,10 +2,7 @@ package vbcode;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,11 +16,9 @@ class VbDecodeTest {
     @Test
     public void vbDecodeTest(){
         // given
-        List<Byte> bytesFor1 = List.of((byte) Integer.parseInt("10000001", 2));
-        List<Byte> bytesFor256 = List.of((byte) Integer.parseInt("00000010", 2), (byte) Integer.parseInt("10000000", 2));
-        List<Byte> encoded = Stream.of(bytesFor1, bytesFor256)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+        byte[] encoded = {(byte) Integer.parseInt("10000001", 2),
+                (byte) Integer.parseInt("00000010", 2),
+                (byte) Integer.parseInt("10000000", 2)};
 
         // when
         List<Integer> actual = VbDecode.vbDecode(encoded);
