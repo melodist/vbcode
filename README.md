@@ -7,9 +7,9 @@ Chapter 06 - [과제] 압축 프로그래밍
   - [x] VB Code Encoding
   - [x] Binary Output
 - Decoding
-  - [ ] Binary Input
+  - [x] Binary Input
   - [x] VB Code Decoding
-  - [ ] String Output
+  - [x] String Output
   
 ## 이슈
 - Java byte 범위는 -127 - 128이나 `Integer.parseInt()`는 Unsigned Integer를 기준으로 함
@@ -20,7 +20,7 @@ Chapter 06 - [과제] 압축 프로그래밍
   - EntryList: 각 Entry의 길이를 저장한 List로 길이는 Entry 개수 * 4Byte (`int`)
 - 일급 컬렉션 사용 방법
   - `usingRecursiveComparison` 사용 
-- `Map::keySet()`
+- `Map::keySet()` 사용 시 순서 보장되지 않음
 
 ## References
 - [웹 개발자를 위한 대규모 서비스를 지탱하는 기술](http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9788994506128)
