@@ -16,10 +16,11 @@ Chapter 06 - [과제] 압축 프로그래밍
   - Casting으로 해결
   - Casting을 사용할 경우의 단점이나 주의점은 무엇일까?
 - Binary File 형식으로 작성할 경우 어디가 `tagName`이고 `EntryId` 인지 구별할 수 없음
-  ![vbcode](https://user-images.githubusercontent.com/52024566/154970725-e84f29b2-ba41-4751-881d-6464670b099d.png)
+  ![vbcode_20220226](https://user-images.githubusercontent.com/52024566/155847225-a5b7f22d-beab-457c-9e5c-d314e7ee1079.png)
   - EntryList: 각 Entry의 길이를 저장한 List로 길이는 Entry 개수 * 4Byte (`int`)
 - 일급 컬렉션 사용 방법
   - `usingRecursiveComparison` 사용 
+- `Map::keySet()`
 
 ## References
 - [웹 개발자를 위한 대규모 서비스를 지탱하는 기술](http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9788994506128)
